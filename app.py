@@ -1,8 +1,10 @@
 import os
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from predict import predict_disease
 
 app = Flask(__name__)
+CORS(app)  # Cross-Origin requests allow karne ke liye
 
 @app.route('/', methods=['GET'])
 def health_check():
@@ -12,7 +14,7 @@ def health_check():
 def predict():
     if 'image' not in request.files:
         return jsonify({"error": "No image uploaded"}), 400
-    
+
     file = request.files['image']
     file_path = os.path.join('uploads', file.filename)
     os.makedirs('uploads', exist_ok=True)
